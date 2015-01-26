@@ -9,11 +9,11 @@ public class Percolation {
      * */
     public Percolation(final int n) {
         N = n;
-        gridPercolationData = new WeightedQuickUnionUF(N + 2);
+        gridPercolationData = new WeightedQuickUnionUF(N * N + 2);
         grid = new boolean[N * N + 2];
         
         grid[0] = true;
-        grid[1] = true;
+        grid[grid.length - 1] = true;
         
         for (int i = 1; i < grid.length - 1; ++i) {
             grid[i] = false;
@@ -26,14 +26,33 @@ public class Percolation {
             throw new java.lang.IndexOutOfBoundsException();
         }
         
-        final int index = i + (j - 1) * N;
+        final int index = convertIndex(i, j);
         
         grid[index] = true;
         
-        if( isOpen(i - 1, j) ) { gridPercolationData.union(index, index-1); }
-        if( isOpen(i + 1, j) ) { gridPercolationData.union(index, index+1); }
-        if( isOpen(i, j - 1) ) { gridPercolationData.union(index, index-N); }
-        if( isOpen(i, j + 1) ) { gridPercolationData.union(index, index-N); }
+        if( i == 1 ) {
+            gridPercolationData.union(index, 0);
+        }
+        
+        if( i == N ) {
+            gridPercolationData.union(index, N*N + 1);
+        }
+        
+        if( i > 1 ) {
+            if( isOpen(i - 1, j) ) { gridPercolationData.union(index, index-1); }
+        }
+        
+        if( i < N ) {
+            if( isOpen(i + 1, j) ) { gridPercolationData.union(index, index-1); }
+        }
+        
+        if( j > 1 ) {
+            if( isOpen(i, j - 1) ) { gridPercolationData.union(index, index-N); }
+        }
+        
+        if( j < N ) {
+            if( isOpen(i, j + 1) ) { gridPercolationData.union(index, index-N); }
+        }
         
     }
 
@@ -43,14 +62,14 @@ public class Percolation {
             throw new java.lang.IndexOutOfBoundsException();
         }
 
-        return grid[i + (j - 1) * N];
+        return grid[convertIndex(i, j)];
     }
 
     /** is site (row i, column j) full? */
     public final boolean isFull(int i, int j) {
-        final int index = i + (j - 1) * N;
+        final int index = convertIndex(i, j);
         return gridPercolationData.connected(index, 0)
-                && gridPercolationData.connected(index, N + 1);
+                && gridPercolationData.connected(index, N*N + 1);
     }
 
     /** does the system percolate?
@@ -60,6 +79,10 @@ public class Percolation {
         return gridPercolationData.connected(0, N + 1);
     }
 
+    private int convertIndex(int i, int j) {
+        return i + (j - 1) * N;
+    }
+    
     public static void main(String[] args) // test client (optional)
     {
     }
