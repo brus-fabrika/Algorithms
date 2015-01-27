@@ -18,7 +18,7 @@ public class Percolation {
 
     /** open site (row i, column j) if it is not open already. */
     public final void open(int i, int j) {
-        if(i < 1 || j < 1 || i > N || j > N) {
+        if (i < 1 || j < 1 || i > N || j > N) {
             throw new java.lang.IndexOutOfBoundsException();
         }
 
@@ -26,21 +26,21 @@ public class Percolation {
 
         grid[index] = true;
 
-        if( i == 1 ) {
+        if (i == 1) {
             gridPercolationData.union(index, 0);
         }
 
-        if( i == N ) {
+        if (i == N) {
             gridPercolationData.union(index, N*N + 1);
         }
 
-        if( i > 1 && isOpen(i - 1, j) ) { gridPercolationData.union(index, index-N); }
+        if (i > 1 && isOpen(i - 1, j)) { gridPercolationData.union(index, index-N); }
         
-        if( i < N && isOpen(i + 1, j) ) { gridPercolationData.union(index, index+N); }
+        if (i < N && isOpen(i + 1, j)) { gridPercolationData.union(index, index+N); }
         
-        if( j > 1 && isOpen(i, j - 1) ) { gridPercolationData.union(index, index-1); }
+        if (j > 1 && isOpen(i, j - 1)) { gridPercolationData.union(index, index-1); }
 
-        if( j < N && isOpen(i, j + 1) ) { gridPercolationData.union(index, index+1); }
+        if (j < N && isOpen(i, j + 1)) { gridPercolationData.union(index, index+1); }
 
     }
 
@@ -69,9 +69,4 @@ public class Percolation {
     private int convertIndex(int i, int j) {
         return j + (i - 1) * N;
     }
-    
-    public static void main(String[] args) // test client (optional)
-    {
-    }
-
 }

@@ -11,7 +11,7 @@ public class PercolationStats {
     
     // perform T independent experiments on an N-by-N grid
     public PercolationStats(int n, int t) {
-        if( n <= 0 || t <= 0) {
+        if (n <= 0 || t <= 0) {
             throw new java.lang.IndexOutOfBoundsException();
         }
 
@@ -23,12 +23,12 @@ public class PercolationStats {
     }
 
     private void runExperimentSeries() {
-        for(int i = 0; i < mExperimentNumber; ++i){
+        for (int i = 0; i < mExperimentNumber; ++i) {
             mExperimentData[i] = runExperiment();
         }
         
         mMean = StdStats.mean(mExperimentData);
-        if(mExperimentNumber > 1) {
+        if (mExperimentNumber > 1) {
             mStddev = StdStats.stddev(mExperimentData);
             mIntervalLo = mMean - 1.96*mStddev/Math.sqrt(mExperimentNumber);
             mIntervalHi = mMean + 1.96*mStddev/Math.sqrt(mExperimentNumber);
@@ -37,17 +37,17 @@ public class PercolationStats {
     
     private double runExperiment() {
         Percolation p = new Percolation(mGridSize);
-        int triesCount = 1;
-        while( !p.percolates() ){
+        int triesCount = 0;
+        while (!p.percolates()) {
             int i = StdRandom.uniform(1, mGridSize + 1);
             int j = StdRandom.uniform(1, mGridSize + 1);
-            if( !p.isOpen(i, j) ){
+            if (!p.isOpen(i, j)) {
                 p.open(i, j);
                 triesCount++;
             }
         }
         
-        return triesCount/(double)(mGridSize*mGridSize);
+        return triesCount/(double) (mGridSize*mGridSize);
     }
     
     public double mean() // sample mean of percolation threshold
@@ -71,8 +71,13 @@ public class PercolationStats {
     }
 
     public static void main(String[] args) {
-        int N = Integer.parseInt(args[0]);
-        int T = Integer.parseInt(args[1]);
+        int N = 2;
+        int T = 100000;
+
+        if (args.length == 2) {
+            N = Integer.parseInt(args[0]);
+            T = Integer.parseInt(args[1]);
+        }
         
         PercolationStats ps = new PercolationStats(N, T);
         StdOut.println("mean                    = " + ps.mean());
