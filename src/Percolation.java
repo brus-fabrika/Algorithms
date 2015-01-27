@@ -11,13 +11,9 @@ public class Percolation {
         N = n;
         gridPercolationData = new WeightedQuickUnionUF(N * N + 2);
         grid = new boolean[N * N + 2];
-        
+
         grid[0] = true;
         grid[grid.length - 1] = true;
-        
-        for (int i = 1; i < grid.length - 1; ++i) {
-            grid[i] = false;
-        }
     }
 
     /** open site (row i, column j) if it is not open already. */
@@ -25,35 +21,27 @@ public class Percolation {
         if(i < 1 || j < 1 || i > N || j > N) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        
+
         final int index = convertIndex(i, j);
-        
+
         grid[index] = true;
-        
+
         if( i == 1 ) {
             gridPercolationData.union(index, 0);
         }
-        
+
         if( i == N ) {
             gridPercolationData.union(index, N*N + 1);
         }
+
+        if( i > 1 && isOpen(i - 1, j) ) { gridPercolationData.union(index, index-N); }
         
-        if( i > 1 ) {
-            if( isOpen(i - 1, j) ) { gridPercolationData.union(index, index-N); }
-        }
+        if( i < N && isOpen(i + 1, j) ) { gridPercolationData.union(index, index+N); }
         
-        if( i < N ) {
-            if( isOpen(i + 1, j) ) { gridPercolationData.union(index, index+N); }
-        }
-        
-        if( j > 1 ) {
-            if( isOpen(i, j - 1) ) { gridPercolationData.union(index, index-1); }
-        }
-        
-        if( j < N ) {
-            if( isOpen(i, j + 1) ) { gridPercolationData.union(index, index+1); }
-        }
-        
+        if( j > 1 && isOpen(i, j - 1) ) { gridPercolationData.union(index, index-1); }
+
+        if( j < N && isOpen(i, j + 1) ) { gridPercolationData.union(index, index+1); }
+
     }
 
     /** is site (row i, column j) open? */

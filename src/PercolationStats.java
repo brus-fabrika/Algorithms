@@ -1,34 +1,73 @@
 public class PercolationStats {
 
-    private Percolation p;
+    private int mGridSize;
+    private int mExperimentNumber;
+    private double[] mExperimentData;
+    
+    private double mMean;
+    private double mStddev = Double.NaN;
+    private double mIntervalLo = Double.NaN;
+    private double mIntervalHi = Double.NaN;
     
     // perform T independent experiments on an N-by-N grid
     public PercolationStats(int n, int t) {
         if( n <= 0 || t <= 0) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        
-        p = new Percolation(n);
+
+        mGridSize = n;
+        mExperimentNumber = t;
+        mExperimentData = new double[mExperimentNumber];
+
+        runExperimentSeries();
     }
 
+    private void runExperimentSeries() {
+        for(int i = 0; i < mExperimentNumber; ++i){
+            mExperimentData[i] = runExperiment();
+        }
+        
+        mMean = StdStats.mean(mExperimentData);
+        if(mExperimentNumber > 1) {
+            mStddev = StdStats.stddev(mExperimentData);
+            mIntervalLo = mMean - 1.96*mStddev/Math.sqrt(mExperimentNumber);
+            mIntervalHi = mMean + 1.96*mStddev/Math.sqrt(mExperimentNumber);
+        }
+    }
+    
+    private double runExperiment() {
+        Percolation p = new Percolation(mGridSize);
+        int triesCount = 1;
+        while( !p.percolates() ){
+            int i = StdRandom.uniform(1, mGridSize + 1);
+            int j = StdRandom.uniform(1, mGridSize + 1);
+            if( !p.isOpen(i, j) ){
+                p.open(i, j);
+                triesCount++;
+            }
+        }
+        
+        return triesCount/(double)(mGridSize*mGridSize);
+    }
+    
     public double mean() // sample mean of percolation threshold
     {
-        return 0.0;
+        return mMean;
     }
 
     public double stddev() // sample standard deviation of percolation threshold
     {
-        return 0.0;
+        return mStddev;
     }
 
     public double confidenceLo() // low endpoint of 95% confidence interval
     {
-        return 0.0;
+        return mIntervalLo;
     }
 
     public double confidenceHi() // high endpoint of 95% confidence interval
     {
-        return 0.0;
+        return mIntervalHi;
     }
 
     public static void main(String[] args) {
