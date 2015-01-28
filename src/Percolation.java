@@ -7,7 +7,11 @@ public class Percolation {
     /** create N-by-N grid, with all sites blocked.
      * @param n - grid dimension
      * */
-    public Percolation(final int n) {
+    public Percolation(int n) {
+        if (n <= 0) {
+            throw new java.lang.IllegalArgumentException();
+        }
+        
         N = n;
         gridPercolationData = new WeightedQuickUnionUF(N * N + 2);
         grid = new boolean[N * N + 2];
@@ -17,7 +21,7 @@ public class Percolation {
     }
 
     /** open site (row i, column j) if it is not open already. */
-    public final void open(int i, int j) {
+    public void open(int i, int j) {
         if (i < 1 || j < 1 || i > N || j > N) {
             throw new java.lang.IndexOutOfBoundsException();
         }
@@ -45,7 +49,7 @@ public class Percolation {
     }
 
     /** is site (row i, column j) open? */
-    public final boolean isOpen(int i, int j) {
+    public boolean isOpen(int i, int j) {
         if (i < 1 || j < 1 || i > N || j > N) {
             throw new java.lang.IndexOutOfBoundsException();
         }
@@ -54,7 +58,11 @@ public class Percolation {
     }
 
     /** is site (row i, column j) full? */
-    public final boolean isFull(int i, int j) {
+    public boolean isFull(int i, int j) {
+        if (i < 1 || j < 1 || i > N || j > N) {
+            throw new java.lang.IndexOutOfBoundsException();
+        }
+        
         final int index = convertIndex(i, j);
         return gridPercolationData.connected(index, 0);
     }
@@ -62,7 +70,7 @@ public class Percolation {
     /** does the system percolate?
      * @return true is grid percolates
      * */
-    public final boolean percolates() {
+    public boolean percolates() {
         return gridPercolationData.connected(0, N*N + 1);
     }
 
