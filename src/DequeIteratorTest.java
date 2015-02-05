@@ -1,17 +1,16 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.junit.Before;
 import org.junit.Test;
 
-
 public class DequeIteratorTest {
 
     private Deque<String> d;
-    
+
     @Before
     public void setUp() throws Exception {
         d = new Deque<>();
@@ -20,13 +19,13 @@ public class DequeIteratorTest {
     @Test
     public void testBasicSequenceAddFirst() {
         String[] testDataRecieved = new String[10];
-        
+
         d.addFirst("AA");
         d.addFirst("BB");
         d.addFirst("CC");
-        
+
         Iterator<String> it = d.iterator();
-        
+
         int i = 0;
         while(it.hasNext()) {
             testDataRecieved[i++] = it.next();
@@ -37,17 +36,17 @@ public class DequeIteratorTest {
         assertTrue("Incorrect element was read", "BB".equals(testDataRecieved[1]));
         assertTrue("Incorrect element was read", "AA".equals(testDataRecieved[2]));
     }
-    
+
     @Test
     public void testBasicSequenceAddLast() {
         String[] testDataRecieved = new String[10];
-        
+
         d.addLast("AA");
         d.addLast("BB");
         d.addLast("CC");
-        
+
         Iterator<String> it = d.iterator();
-        
+
         int i = 0;
         while(it.hasNext()) {
             testDataRecieved[i++] = it.next();
@@ -58,11 +57,11 @@ public class DequeIteratorTest {
         assertTrue("Incorrect element was read", "BB".equals(testDataRecieved[1]));
         assertTrue("Incorrect element was read", "CC".equals(testDataRecieved[2]));
     }
-    
+
     @Test
     public void testBasicSequenceRemoveFirst() {
         String[] testDataRecieved = new String[10];
-        
+
         d.addLast("AA");
         d.addLast("BB");
         d.addLast("CC");
@@ -71,9 +70,9 @@ public class DequeIteratorTest {
 
         d.removeFirst();
         d.removeFirst();
-        
+
         Iterator<String> it = d.iterator();
-        
+
         int i = 0;
         while(it.hasNext()) {
             testDataRecieved[i++] = it.next();
@@ -84,11 +83,11 @@ public class DequeIteratorTest {
         assertTrue("Incorrect element was read", "DD".equals(testDataRecieved[1]));
         assertTrue("Incorrect element was read", "EE".equals(testDataRecieved[2]));
     }
-    
+
     @Test
     public void testBasicSequenceRemoveLast() {
         String[] testDataRecieved = new String[10];
-        
+
         d.addLast("AA");
         d.addLast("BB");
         d.addLast("CC");
@@ -97,9 +96,9 @@ public class DequeIteratorTest {
 
         d.removeLast();
         d.removeLast();
-        
+
         Iterator<String> it = d.iterator();
-        
+
         int i = 0;
         while(it.hasNext()) {
             testDataRecieved[i++] = it.next();
@@ -110,13 +109,13 @@ public class DequeIteratorTest {
         assertTrue("Incorrect element was read", "BB".equals(testDataRecieved[1]));
         assertTrue("Incorrect element was read", "CC".equals(testDataRecieved[2]));
     }
-    
+
     @Test
     public void testHasNextEmpty() {
         Iterator<String> it = d.iterator();
         assertFalse(it.hasNext());
     }
-    
+
     @Test
     public void testHasNextOneAdd() {
         d.addFirst("AA");
@@ -125,13 +124,13 @@ public class DequeIteratorTest {
         assertTrue("AA".equals(it.next()));
         assertFalse(it.hasNext());
     }
-    
+
     @Test
     public void testHasNextTwoAdd() {
         d.addFirst("AA");
         d.addFirst("BB");
         Iterator<String> it = d.iterator();
-        
+
         assertTrue(it.hasNext());
         assertTrue("BB".equals(it.next()));
         assertTrue(it.hasNext());
@@ -144,7 +143,7 @@ public class DequeIteratorTest {
         Iterator<String> it = d.iterator();
         it.next();
     }
-    
+
     @Test(expected = UnsupportedOperationException.class)
     public void testRemove() {
         Iterator<String> it = d.iterator();

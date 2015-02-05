@@ -2,70 +2,161 @@ import java.util.Iterator;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
+    private final int INITAIL_CAPACITY = 5;
+
+    private Item[] q;
+
+    private int head = 0;
+    private int tail = 0;
+
+    private int N = 0;
+
     private class RandomizedQueueIterator implements Iterator<Item> {
+
+        private Item[] qq = (Item[]) new Object[N];
+        private int pos = 0;
+
+        private void swap(int i, int j) {
+            Item tmp = qq[i];
+            qq[i] = qq[j];
+            qq[j] = tmp;
+        }
+
+        public RandomizedQueueIterator() {
+            for(int i = 0; i < N; ++i) {
+                int index = (head + i) % q.length;
+                int r = StdRandom.uniform(i + 1);
+                qq[i] = q[index];
+                swap(i, r);
+            }
+        }
 
         @Override
         public boolean hasNext() {
-            return false;
+            return pos != qq.length;
         }
 
         @Override
         public Item next() {
-            return null;
+            return qq[pos++];
         }
-        
+
+        @Override
         public void remove() {
             throw new java.lang.UnsupportedOperationException();
         }
     }
-    
+
     // construct an empty randomized queue
     public RandomizedQueue() {
-        
+        q = (Item[]) new Object[INITAIL_CAPACITY];
     }
-    
+
     // is the queue empty?
     public boolean isEmpty() {
-        return false;
+        return N == 0;
     }
-    
+
     // return the number of items on the queue
     public int size() {
-        return 0;
+        return N;
     }
-    
+
     // add the item
     public void enqueue(Item item) {
         if (item == null) {
             throw new java.lang.NullPointerException();
         }
+
+        q[tail] = item;
+        tail = (tail + 1) % q.length;
+        N++;
+
+        if(tail == head) {
+            int newSize = N * 15 / 10;
+            resize(newSize);
+        }
     }
-    
+
+    private void resize(int d) {
+        System.out.println("resize to " + d);
+        Item[] qTemp = (Item[]) new Object[d];
+
+        for(int i = 0; i < N; ++i) {
+            int index = (head + i) % q.length;
+            qTemp[i] = q[index];
+        }
+
+        q = qTemp;
+
+        head = 0;
+        tail = N;
+    }
+
     // delete and return a random item
     public Item dequeue() {
         if (isEmpty()) {
             throw new java.util.NoSuchElementException();
         }
-        
-        return null;
+
+        Item value = q[head];
+        q[head] = null;
+
+        head = (head + 1) % q.length;
+        N--;
+
+        if(N <= q.length/4) {
+            resize(N);
+        }
+
+        return value;
     }
-    
+
     // return (but do not delete) a random item
     public Item sample() {
         if (isEmpty()) {
             throw new java.util.NoSuchElementException();
         }
-        
-        return null;
+
+        int index = (head + StdRandom.uniform(N)) % q.length;
+
+        return q[index];
     }
-    
+
     // return an independent iterator over items in random order
+    @Override
     public Iterator<Item> iterator() {
         return new RandomizedQueueIterator();
     }
 
    // unit testing
    public static void main(String[] args) {
-       
+       RandomizedQueue<String> q = new RandomizedQueue<>();
+
+       q.enqueue("AA");
+       q.enqueue("BB");
+       q.enqueue("CC");
+       q.enqueue("DD");
+       q.enqueue("EE");
+       q.enqueue("FF");
+       q.enqueue("GG");
+       q.enqueue("HH");
+       q.enqueue("II");
+       q.enqueue("JJ");
+       q.enqueue("KK");
+       q.enqueue("LL");
+       q.enqueue("MM");
+
+       for(String s : q) {
+           System.out.print(s + " ");
+       }
+
+       System.out.println();
+
+       for(String s : q) {
+           System.out.print(s + " ");
+       }
+
+
    }
 }

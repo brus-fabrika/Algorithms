@@ -1,7 +1,6 @@
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.junit.Before;
@@ -11,12 +10,12 @@ import org.junit.Test;
 public class DequeTest {
 
     private Deque<Integer> d;
-    
+
     @Before
     public void setUp() throws Exception {
         d = new Deque<>();
     }
-    
+
     @Test
     public void isEmptyOnCreateTest() {
         assertTrue(d.isEmpty());
@@ -57,7 +56,7 @@ public class DequeTest {
     public void addLastNullTest() {
         d.addLast(null);
     }
-    
+
     @Test(expected = NoSuchElementException.class)
     public void removeFirstEmptyNullTest() {
         d.removeFirst();
