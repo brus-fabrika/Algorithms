@@ -27,7 +27,7 @@ public class DequeIteratorTest {
         Iterator<String> it = d.iterator();
 
         int i = 0;
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             testDataRecieved[i++] = it.next();
         }
 
@@ -48,7 +48,7 @@ public class DequeIteratorTest {
         Iterator<String> it = d.iterator();
 
         int i = 0;
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             testDataRecieved[i++] = it.next();
         }
 
@@ -74,7 +74,7 @@ public class DequeIteratorTest {
         Iterator<String> it = d.iterator();
 
         int i = 0;
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             testDataRecieved[i++] = it.next();
         }
 
@@ -100,7 +100,7 @@ public class DequeIteratorTest {
         Iterator<String> it = d.iterator();
 
         int i = 0;
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             testDataRecieved[i++] = it.next();
         }
 
