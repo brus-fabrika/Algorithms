@@ -71,5 +71,6 @@ public class Point implements Comparable<Point> {
 
     // unit test
     public static void main(String[] args) {
+
     }
 }
