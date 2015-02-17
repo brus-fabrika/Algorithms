@@ -20,7 +20,9 @@ public class PointPlotter {
         StdDraw.setPenRadius(0.01);  // make the points a bit larger
 
         // read in the input
-        String filename = args[0];
+        //String filename = args[0];
+        //String filename = "rs1423.txt";
+        String filename = "input56.txt";
         In in = new In(filename);
         int N = in.readInt();
         for (int i = 0; i < N; i++) {

@@ -24,8 +24,8 @@ public class Point implements Comparable<Point> {
         }
     };
 
-    private final int x;                              // x coordinate
-    private final int y;                              // y coordinate
+    private final int x; // x coordinate
+    private final int y; // y coordinate
 
     // create the point (x, y)
     public Point(int x, int y) {
