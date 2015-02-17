@@ -30,27 +30,7 @@ public class Fast {
         }
 
         for (int i = 0; i < N; ++i) {
-            for (int j = i + 1; j < N; ++j) {
-                for (int k = j + 1; k < N; ++k) {
-                    for (int l = k + 1; l < N; ++l) {
-                        double pq = points[i].slopeTo(points[j]);
-                        double pr = points[i].slopeTo(points[k]);
-                        double ps = points[i].slopeTo(points[l]);
-
-                        boolean col = (pq == pr && pq == ps && pr == ps);
-
-                        if (col) {
-                            Point[] p1 = { points[i], points[j], points[k],
-                                    points[l] };
-                            Arrays.sort(p1);
-
-                            StdOut.println(p1[0] + " -> " + p1[1] + " -> "
-                                    + p1[2] + " -> " + p1[3]);
-                            p1[0].drawTo(p1[3]);
-                        }
-                    }
-                }
-            }
+            Arrays.sort(points,  points[i].SLOPE_ORDER);
         }
 
         // display to screen all at once
