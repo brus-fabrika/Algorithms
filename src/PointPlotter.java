@@ -22,7 +22,7 @@ public class PointPlotter {
         // read in the input
         //String filename = args[0];
         //String filename = "rs1423.txt";
-        String filename = "input56.txt";
+        String filename = "input6.txt";
         In in = new In(filename);
         int N = in.readInt();
         for (int i = 0; i < N; i++) {

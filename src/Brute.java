@@ -3,6 +3,9 @@ import java.util.Arrays;
 public class Brute {
 
     public static void main(String[] args) {
+
+        if (args.length < 1) return;
+
         // rescale coordinates and turn on animation mode
         StdDraw.setXscale(0, 32768);
         StdDraw.setYscale(0, 32768);
@@ -10,9 +13,9 @@ public class Brute {
         StdDraw.setPenRadius(0.01); // make the points a bit larger
 
         // read in the input
-        // String filename = args[0];
+        String filename = args[0];
         // String filename = "grid4x4.txt";
-        String filename = "input6.txt";
+        // String filename = "input6.txt";
         // String filename = "input400.txt";
         // String filename = "horizontal5.txt";
         // String filename = "vertical5.txt";
