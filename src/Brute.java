@@ -14,11 +14,7 @@ public class Brute {
 
         // read in the input
         String filename = args[0];
-        // String filename = "grid4x4.txt";
-        // String filename = "input6.txt";
-        // String filename = "input400.txt";
-        // String filename = "horizontal5.txt";
-        // String filename = "vertical5.txt";
+
         In in = new In(filename);
         int N = in.readInt();
 
