@@ -5,6 +5,8 @@ public class Solver {
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
         board = initial;
+
+
     }
 
     // is the initial board solvable?
@@ -14,7 +16,7 @@ public class Solver {
 
     // min number of moves to solve initial board; -1 if unsolvable
     public int moves() {
-        return 0;
+        return -1;
     }
 
     // sequence of boards in a shortest solution; null if unsolvable
