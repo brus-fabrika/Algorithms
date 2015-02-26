@@ -56,6 +56,7 @@ public class Solver {
 
         mGameTree = new MinPQ<>();
         mGameTree.insert(new SearchNode(initial));
+        mGameTree.insert(new SearchNode(initial.twin()));
 
         SearchNode node = mGameTree.delMin();
 
@@ -102,7 +103,7 @@ public class Solver {
     // solve a slider puzzle (given below)
     public static void main(String[] args) {
         // create initial board from file
-        In in = new In("puzzle36.txt");
+        In in = new In("puzzle22.txt");
         int N = in.readInt();
         int[][] blocks = new int[N][N];
         for (int i = 0; i < N; i++)

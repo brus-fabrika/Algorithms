@@ -72,7 +72,31 @@ public class Board {
 
     // a board that is obtained by exchanging two adjacent blocks in the same row
     public Board twin() {
-        return null;
+        if (N == 1) return null;
+
+        int firstIndex = 0;
+        int secondIndex = 1;
+
+        if (N == 2) {
+            if (blocks[firstIndex] == 0 || blocks[secondIndex] == 0) {
+                firstIndex += N;
+                secondIndex += N;
+            }
+        } else {
+            if (blocks[firstIndex] == 0) {
+                firstIndex++;
+                secondIndex++;
+            } else if (blocks[secondIndex] == 0) {
+                secondIndex++;
+            }
+        }
+
+        int[] newBlocks = new int[N*N];
+        System.arraycopy(blocks, 0, newBlocks, 0, blocks.length);
+        newBlocks[firstIndex] = blocks[secondIndex];
+        newBlocks[secondIndex] = blocks[firstIndex];
+
+        return new Board(newBlocks, N);
     }
 
     // does this board equal y?
