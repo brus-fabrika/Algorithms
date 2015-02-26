@@ -21,6 +21,11 @@ public class Board {
         }
     }
 
+    private Board(int[] blocks, int boardSize) {
+        N = boardSize;
+        this.blocks = blocks;
+    }
+
     // board dimension N
     public int dimension() {
         return N;
@@ -97,27 +102,25 @@ public class Board {
 
         final int emptyIndex = getEmptyIndex();
 
-        final int emptyRow = emptyIndex/5;
-        final int emptyCol = emptyIndex % 5;
+        final int emptyRow = emptyIndex/N;
+        final int emptyCol = emptyIndex % N;
 
-        int newIndex = -1;
-/*
         if (emptyRow > 0) {
-            int[] newBlocks = new int[N*N];
-            System.arraycopy(blocks, 0, newBlocks, 0, blocks.length);
-            newIndex = emptyCol + (emptyRow - 1)*N;
-            newBlocks[emptyIndex] = blocks[newIndex];
-            newBlocks[newIndex] = 0;
-
-            n.push(new Board());
+            n.push(createNorthNeighbor(emptyRow, emptyCol));
         }
 
-        if (emptyRow < N - 1) {  }
+        if (emptyRow < N - 1) {
+            n.push(createSouthNeighbor(emptyRow, emptyCol));
+        }
 
-        if (emptyCol > 0) {  }
+        if (emptyCol > 0) {
+            n.push(createWestNeighbor(emptyRow, emptyCol));
+        }
 
-        if (emptyCol < N - 1) {  }
-*/
+        if (emptyCol < N - 1) {
+            n.push(createEastNeighbor(emptyRow, emptyCol));
+        }
+
         return n;
     }
 
@@ -126,6 +129,54 @@ public class Board {
             if (blocks[i] == 0) return i;
         }
         return -1;
+    }
+
+    private Board createNorthNeighbor(int row, int col) {
+
+        int[] newBlocks = new int[N*N];
+        System.arraycopy(blocks, 0, newBlocks, 0, blocks.length);
+        int emptyIndex = col + row*N;
+        int newIndex = col + (row - 1)*N;
+        newBlocks[emptyIndex] = blocks[newIndex];
+        newBlocks[newIndex] = 0;
+
+        return new Board(newBlocks, N);
+    }
+
+    private Board createSouthNeighbor(int row, int col) {
+
+        int[] newBlocks = new int[N*N];
+        System.arraycopy(blocks, 0, newBlocks, 0, blocks.length);
+        int emptyIndex = col + row*N;
+        int newIndex = col + (row + 1)*N;
+        newBlocks[emptyIndex] = blocks[newIndex];
+        newBlocks[newIndex] = 0;
+
+        return new Board(newBlocks, N);
+    }
+
+    private Board createWestNeighbor(int row, int col) {
+
+        int[] newBlocks = new int[N*N];
+        System.arraycopy(blocks, 0, newBlocks, 0, blocks.length);
+        int emptyIndex = col + row*N;
+        int newIndex = col - 1 + row*N;
+        newBlocks[emptyIndex] = blocks[newIndex];
+        newBlocks[newIndex] = 0;
+
+        return new Board(newBlocks, N);
+    }
+
+    private Board createEastNeighbor(int row, int col) {
+
+        int[] newBlocks = new int[N*N];
+        System.arraycopy(blocks, 0, newBlocks, 0, blocks.length);
+        int emptyIndex = col + row*N;
+        int newIndex = col + 1 + row*N;
+        newBlocks[emptyIndex] = blocks[newIndex];
+        newBlocks[newIndex] = 0;
+
+        return new Board(newBlocks, N);
     }
 
     // string representation of this board (in the output format specified below)
