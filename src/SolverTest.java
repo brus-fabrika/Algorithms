@@ -118,12 +118,43 @@ public class SolverTest {
         assertEquals("Wrong moves count", 10, solver.moves());
     }
 
-//    @Test
-//    public void testPuzzle45() {
-//        Board board = getBoard("puzzle45");
-//        Solver solver = new Solver(board);
-//        assertTrue("Should be solvable", solver.isSolvable());
-//        assertEquals("Wrong moves count", 45, solver.moves());
-//    }
+    @Test
+    public void testPuzzle35() {
+        Board board = getBoard("puzzle35");
+        Solver solver = new Solver(board);
+        assertTrue("Should be solvable", solver.isSolvable());
+        assertEquals("Wrong moves count", 35, solver.moves());
+    }
 
+    @Test
+    public void testPuzzle36() {
+        Board board = getBoard("puzzle36");
+        Solver solver = new Solver(board);
+        assertTrue("Should be solvable", solver.isSolvable());
+        assertEquals("Wrong moves count", 36, solver.moves());
+    }
+
+    @Test
+    public void testPuzzle37() {
+        Board board = getBoard("puzzle37");
+        Solver solver = new Solver(board);
+        assertTrue("Should be solvable", solver.isSolvable());
+        assertEquals("Wrong moves count", 37, solver.moves());
+    }
+
+    @Test
+    public void testPuzzle45() {
+        Board board = getBoard("puzzle45");
+        Solver solver = new Solver(board);
+        assertTrue("Should be solvable", solver.isSolvable());
+        assertEquals("Wrong moves count", 45, solver.moves());
+    }
+
+    @Test
+    public void testPuzzle4x4_78() {
+        Board board = getBoard("puzzle4x4-78");
+        Solver solver = new Solver(board);
+        assertTrue("Should be solvable", solver.isSolvable());
+        assertEquals("Wrong moves count", 78, solver.moves());
+    }
 }

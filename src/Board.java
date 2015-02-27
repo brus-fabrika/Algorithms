@@ -6,6 +6,9 @@ public class Board {
 
     private final int N;
 
+    private int mManattan = -1;
+    private int mHamming = -1;
+
     // construct a board from an N-by-N array of blocks
     // (where blocks[i][j] = block in row i, column j)
     public Board(int[][] blocks) {
@@ -33,35 +36,39 @@ public class Board {
 
     // number of blocks out of place
     public int hamming() {
-        int result = 0;
+        if (mHamming != -1) return mHamming;
+
+        mHamming = 0;
 
         for (int i = 0; i < blocks.length; ++i) {
-            if ((blocks[i] != 0) && blocks[i] != i+1) ++result;
+            if ((blocks[i] != 0) && blocks[i] != i+1) ++mHamming;
         }
 
-        return result;
+        return mHamming;
     }
 
     // sum of Manhattan distances between blocks and goal
     public int manhattan() {
-        int result = 0;
+        if (mManattan != -1) return mManattan;
+
+        mManattan = 0;
 
         for (int i = 0; i < blocks.length; ++i) {
             if (blocks[i] != 0) {
-                result += getRowDif(blocks[i], i) + getColDif(blocks[i], i);
+                mManattan += getRowDif(blocks[i], i) + getColDif(blocks[i], i);
             }
         }
 
-        return result;
+        return mManattan;
     }
 
     private int getRowDif(int number, int pos) {
-        int result = number/N - pos/N;
+        int result = (number - 1)/N - (pos)/N;
         return result > 0 ? result : -result;
     }
 
     private int getColDif(int number, int pos) {
-        int result = (number - 1) % N - (pos % N);
+        int result = ((number - 1) % N) - ((pos) % N);
         return result > 0 ? result : -result;
     }
 
@@ -77,18 +84,9 @@ public class Board {
         int firstIndex = 0;
         int secondIndex = 1;
 
-        if (N == 2) {
-            if (blocks[firstIndex] == 0 || blocks[secondIndex] == 0) {
-                firstIndex += N;
-                secondIndex += N;
-            }
-        } else {
-            if (blocks[firstIndex] == 0) {
-                firstIndex++;
-                secondIndex++;
-            } else if (blocks[secondIndex] == 0) {
-                secondIndex++;
-            }
+        if (blocks[firstIndex] == 0 || blocks[secondIndex] == 0) {
+            firstIndex += N;
+            secondIndex += N;
         }
 
         int[] newBlocks = new int[N*N];
@@ -109,15 +107,6 @@ public class Board {
         Board yBoard = (Board) y;
 
         return Arrays.equals(blocks, yBoard.blocks);
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + N;
-        result = prime * result + Arrays.hashCode(blocks);
-        return result;
     }
 
     // all neighboring boards

@@ -97,13 +97,14 @@ public class Solver {
 
     // sequence of boards in a shortest solution; null if unsolvable
     public Iterable<Board> solution() {
+        if (!isSolvable) return null;
         return mSolution;
     }
 
     // solve a slider puzzle (given below)
     public static void main(String[] args) {
         // create initial board from file
-        In in = new In("puzzle22.txt");
+        In in = new In("puzzle4x4-hard1.txt");
         int N = in.readInt();
         int[][] blocks = new int[N][N];
         for (int i = 0; i < N; i++)
@@ -120,8 +121,8 @@ public class Solver {
             StdOut.println("No solution possible");
         else {
             StdOut.println("Minimum number of moves = " + solver.moves());
-            for (Board board : solver.solution())
-                StdOut.println(board);
+//            for (Board board : solver.solution())
+//                StdOut.println(board);
         }
     }
 }
