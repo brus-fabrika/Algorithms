@@ -5,13 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class SAPTest {
+public class SAPTest2 {
 
     private SAP sap;
 
     @Before
     public void setUp() throws Exception {
-        final String fileName = "digraph1.txt";
+        final String fileName = "digraph1_m.txt";
         In in = new In(fileName);
         Digraph G = new Digraph(in);
         sap = new SAP(G);
@@ -37,10 +37,10 @@ public class SAPTest {
 
     @Test
     public void testDigraph_3() {
-        assertEquals(4, sap.length(7, 2));
+        assertEquals(3, sap.length(7, 2));
         assertEquals(0, sap.ancestor(7, 2));
 
-        assertEquals(4, sap.length(2, 7));
+        assertEquals(3, sap.length(2, 7));
         assertEquals(0, sap.ancestor(2, 7));
     }
 
