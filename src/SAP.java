@@ -1,7 +1,25 @@
 public class SAP {
 
-    private Digraph dg;
+    final private Digraph dg;
 
+    private static class Pair<KeyType, ValueType> {
+      final private KeyType key;
+      final private ValueType value;
+      
+      public Pair(KeyType key, ValueType value) {
+        this.key = key;
+        this.value = value;
+      }
+      
+      public KeyType getKey() {
+        return key;
+      }
+      
+      public ValueType getValue() {
+        return value;
+      }
+    }
+    
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
         if (G == null) throw new java.lang.NullPointerException();
@@ -13,25 +31,23 @@ public class SAP {
 
         BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(dg, w);
 
-        Queue<Integer> q = new Queue<>();
-        Queue<Integer> l = new Queue<>();
+        Queue<Pair<Integer, Integer>> q = new Queue<>();
 
         int result = Integer.MAX_VALUE;
 
-        int level = 0;
-        q.enqueue(v);
-        l.enqueue(level);
+        q.enqueue(new Pair<Integer, Integer>(v, 0));
 
         while (!q.isEmpty()) {
 
-            int x = q.dequeue();
-            level = l.dequeue() + 1;
+            Pair<Integer, Integer> p = q.dequeue();
 
-            for(int i: dg.adj(x)) {
-                q.enqueue(i);
-                l.enqueue(level);
-                if(bsf.hasPathTo(i)) {
-                    int tmp = bsf.distTo(i) + level;
+            int x = p.getKey();
+            int level = p.getValue() + 1;
+
+            for (int currentVertex: dg.adj(x)) {
+                q.enqueue(new Pair<Integer, Integer>(currentVertex, level));
+                if (bsf.hasPathTo(currentVertex)) {
+                    int tmp = bsf.distTo(currentVertex) + level;
                     if (result > tmp) result = tmp;
                 }
             }
