@@ -1,39 +1,61 @@
 public class SAP {
 
-    final private Digraph dg;
+    private final Digraph DG;
 
     private static class Pair<KeyType, ValueType> {
-      final private KeyType key;
-      final private ValueType value;
-      
-      public Pair(KeyType key, ValueType value) {
-        this.key = key;
-        this.value = value;
-      }
-      
-      public KeyType getKey() {
-        return key;
-      }
-      
-      public ValueType getValue() {
-        return value;
-      }
+        private final KeyType KEY;
+        private final ValueType VALUE;
+
+        public Pair(KeyType key, ValueType value) {
+            this.KEY = key;
+            this.VALUE = value;
+        }
+
+        public KeyType getKey() {
+            return KEY;
+        }
+
+        public ValueType getValue() {
+            return VALUE;
+        }
     }
-    
+
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
         if (G == null) throw new java.lang.NullPointerException();
-        dg = G;
+        DG = G;
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
 
-        BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(dg, w);
+        BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(DG, w);
+        Pair<Integer, Integer> p = calculateAncestor(v, bsf);
+
+        return p.getValue();
+    }
+
+    // a common ancestor of v and w that participates in a shortest ancestral
+    // path; -1 if no such path
+    public int ancestor(int v, int w) {
+
+        BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(DG, w);
+        Pair<Integer, Integer> p = calculateAncestor(v, bsf);
+
+        return p.getKey();
+    }
+
+    private Pair<Integer, Integer> calculateAncestor(int v, BreadthFirstDirectedPaths bfs) {
 
         Queue<Pair<Integer, Integer>> q = new Queue<>();
 
-        int result = Integer.MAX_VALUE;
+        int sapLenght = Integer.MAX_VALUE;
+        int ancestorVertex = -1;
+
+        if (bfs.hasPathTo(v)) {
+            sapLenght = bfs.distTo(v);
+            ancestorVertex = v;
+        }
 
         q.enqueue(new Pair<Integer, Integer>(v, 0));
 
@@ -44,123 +66,54 @@ public class SAP {
             int x = p.getKey();
             int level = p.getValue() + 1;
 
-            for (int currentVertex: dg.adj(x)) {
+            for (int currentVertex: DG.adj(x)) {
                 q.enqueue(new Pair<Integer, Integer>(currentVertex, level));
-                if (bsf.hasPathTo(currentVertex)) {
-                    int tmp = bsf.distTo(currentVertex) + level;
-                    if (result > tmp) result = tmp;
-                }
-            }
-        }
-
-        return result == Integer.MAX_VALUE ? -1 : result;
-    }
-
-    // a common ancestor of v and w that participates in a shortest ancestral
-    // path; -1 if no such path
-    public int ancestor(int v, int w) {
-
-        BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(dg, w);
-
-        Queue<Integer> q = new Queue<>();
-        Queue<Integer> l = new Queue<>();
-
-        int result = Integer.MAX_VALUE;
-        int r = -1;
-
-        int level = 0;
-        q.enqueue(v);
-        l.enqueue(level);
-        while (!q.isEmpty()) {
-            int x = q.dequeue();
-            level = l.dequeue() + 1;
-            for(int i: dg.adj(x)) {
-                q.enqueue(i);
-                l.enqueue(level);
-                if(bsf.hasPathTo(i)) {
-                    int tmp = bsf.distTo(i) + level;
-                    if (result > tmp) {
-                        result = tmp;
-                        r = i;
+                if (bfs.hasPathTo(currentVertex)) {
+                    int tmp = bfs.distTo(currentVertex) + level;
+                    if (sapLenght > tmp) {
+                        sapLenght = tmp;
+                        ancestorVertex = currentVertex;
                     }
                 }
             }
-            level++;
         }
 
-        return r;
+        return ancestorVertex == -1 ? new Pair<Integer, Integer>(-1, -1)
+                                    : new Pair<Integer, Integer>(ancestorVertex, sapLenght);
     }
 
     // length of shortest ancestral path between any vertex in v and any vertex
     // in w; -1 if no such path
     public int length(Iterable<Integer> v, Iterable<Integer> w) {
 
-        BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(dg, w);
+        BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(DG, w);
 
-        Queue<Integer> q = new Queue<>();
-        Queue<Integer> qq = new Queue<>();
+        Pair<Integer, Integer> p = calculateAncestor(v, bsf);
 
-        int result = Integer.MAX_VALUE;
-
-
-        int r = -1;
-
-        for(int vv: v) qq.enqueue(vv);
-
-        while (!qq.isEmpty()) {
-            q.enqueue(qq.dequeue());
-            int level = 1;
-            while (!q.isEmpty()) {
-                int x = q.dequeue();
-                for(int i: dg.adj(x)) {
-                    q.enqueue(i);
-                    if(bsf.hasPathTo(i)) {
-                        int tmp = bsf.distTo(i) + level;
-                        if (result > tmp) result = tmp;
-                    }
-                }
-                level++;
-            }
-        }
-
-        return result == Integer.MAX_VALUE ? -1 : result;
+        return p.getValue();
     }
 
     // a common ancestor that participates in shortest ancestral path; -1 if no
     // such path
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
 
-        BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(dg, w);
+        BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(DG, w);
 
-        Queue<Integer> q = new Queue<>();
-        Queue<Integer> qq = new Queue<>();
+        Pair<Integer, Integer> p = calculateAncestor(v, bsf);
 
-        int result = Integer.MAX_VALUE;
+        return p.getKey();
+    }
 
-        int r = -1;
+    private Pair<Integer, Integer> calculateAncestor(Iterable<Integer> v, BreadthFirstDirectedPaths bfs) {
 
-        for(int vv: v) qq.enqueue(vv);
+        Pair<Integer, Integer> p = new Pair<>(-1, Integer.MAX_VALUE);
 
-        while (!qq.isEmpty()) {
-            q.enqueue(qq.dequeue());
-            int level = 1;
-            while (!q.isEmpty()) {
-                int x = q.dequeue();
-                for(int i: dg.adj(x)) {
-                    q.enqueue(i);
-                    if(bsf.hasPathTo(i)) {
-                        int tmp = bsf.distTo(i) + level;
-                        if (result > tmp) {
-                            result = tmp;
-                            r = i;
-                        }
-                    }
-                }
-                level++;
-            }
+        for (int vv: v) {
+            Pair<Integer, Integer> t = calculateAncestor(vv, bfs);
+            if ((t.getValue() != -1) && (p.getValue() > t.getValue())) p = t;
         }
 
-        return r;
+        return p.getKey() == -1 ? new Pair<Integer, Integer>(-1, -1) : p;
     }
 
     // do unit testing of this class

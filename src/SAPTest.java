@@ -63,6 +63,15 @@ public class SAPTest {
     }
 
     @Test
+    public void testDigraph_6() {
+        assertEquals(2, sap.length(7, 1));
+        assertEquals(1, sap.ancestor(7, 1));
+
+        assertEquals(2, sap.length(1, 7));
+        assertEquals(1, sap.ancestor(1, 7));
+    }
+
+    @Test
     public void testDigraph_multi() {
         Bag<Integer> vs = new Bag<Integer>();
         vs.add(7); vs.add(9);
@@ -77,4 +86,18 @@ public class SAPTest {
         assertEquals(ancestor, sap.ancestor(ws, vs));
     }
 
+    @Test
+    public void testDigraph_multi_2() {
+        Bag<Integer> vs = new Bag<Integer>();
+        vs.add(7); vs.add(4);
+        Bag<Integer> ws = new Bag<Integer>();
+        ws.add(0); ws.add(1);
+        final int l = 1; // who knows
+        final int a = 1;  // who knows
+        final int length = sap.length(vs, ws);
+        final int ancestor = sap.ancestor(vs, ws);
+        assertTrue("length/ancestor " + length + "/" + ancestor + " but should be " + l + "/" + a, length == l && ancestor == a);
+        assertEquals(length, sap.length(ws, vs));
+        assertEquals(ancestor, sap.ancestor(ws, vs));
+    }
 }
