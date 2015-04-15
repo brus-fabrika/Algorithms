@@ -67,6 +67,7 @@ public class SAP {
             int level = p.getValue() + 1;
 
             for (int currentVertex: DG.adj(x)) {
+              StdOut.println("currentVertex = " + currentVertex);
                 q.enqueue(new Pair<Integer, Integer>(currentVertex, level));
                 if (bfs.hasPathTo(currentVertex)) {
                     int tmp = bfs.distTo(currentVertex) + level;
@@ -118,7 +119,7 @@ public class SAP {
 
     // do unit testing of this class
     public static void main(String[] args) {
-        In in = new In(args[0]);
+        In in = new In("digraph9.txt");
         Digraph G = new Digraph(in);
 
         StdOut.printf("G.V() =  %d\n", G.V());
@@ -128,6 +129,7 @@ public class SAP {
             int v = StdIn.readInt();
             int w = StdIn.readInt();
             int length = sap.length(v, w);
+            StdOut.println("ping");
             int ancestor = sap.ancestor(v, w);
             StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
         }

@@ -57,4 +57,16 @@ public class WordNetTest {
         WordNet wordnet = new WordNet("synsets.txt", "hypernyms.txt");
         assertEquals(29, wordnet.distance("Brown_Swiss", "barrel_roll"));
     }
+    
+    @Test
+    public void testSapWormBird() {
+        WordNet wordnet = new WordNet("synsets.txt", "hypernyms.txt");
+        assertEquals("animal animate_being beast brute creature fauna", wordnet.sap("worm", "bird"));
+    }
+  
+    @Test
+    public void testSapBirdWorm() {
+        WordNet wordnet = new WordNet("synsets.txt", "hypernyms.txt");
+        assertEquals("animal animate_being beast brute creature fauna", wordnet.sap("bird", "worm"));
+    }
 }

@@ -70,6 +70,12 @@ public class SAPTest {
         assertEquals(2, sap.length(1, 7));
         assertEquals(1, sap.ancestor(1, 7));
     }
+    
+    @Test
+    public void testDigraph_7() {
+        assertEquals(0, sap.length(3, 3));
+        assertEquals(3, sap.ancestor(3, 3));
+    }
 
     @Test
     public void testDigraph_multi() {

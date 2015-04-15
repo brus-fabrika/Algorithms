@@ -72,6 +72,12 @@ public class SAPTest2 {
     }
 
     @Test
+    public void testDigraph_7() {
+        assertEquals(0, sap.length(3, 3));
+        assertEquals(3, sap.ancestor(3, 3));
+    }
+    
+    @Test
     public void testDigraph_multi() {
         Bag<Integer> vs = new Bag<Integer>();
         vs.add(7); vs.add(9);
