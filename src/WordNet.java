@@ -33,7 +33,7 @@ public class WordNet {
             line = synIn.readLine();
         }
 
-        Digraph mGraph = new Digraph(mSynsets.size());
+        Digraph graph = new Digraph(mSynsets.size());
 
         In hypIn = new In(hypernyms);
 
@@ -44,13 +44,23 @@ public class WordNet {
 
             for (int i = 1; i < ss.length; ++i) {
                 int idHyp = Integer.parseInt(ss[i]);
-                mGraph.addEdge(id, idHyp);
+                graph.addEdge(id, idHyp);
             }
 
             line = hypIn.readLine();
         }
+        
+        DirectedCycle dc = new DirectedCycle(graph);
+        if (dc.hasCycle()) throw new java.lang.IllegalArgumentException("Cycle: not a rooted DAG");
+        
+        int rootCount = 0;
+        for (int i = 0; i < graph.V() - 1; ++i) {
+          if (graph.outdegree(i) == 0) rootCount++;
+        }
+        
+        if (rootCount != 1) throw new java.lang.IllegalArgumentException("More then 1 root: not a rooted DAG");
 
-        mSap = new SAP(mGraph);
+        mSap = new SAP(graph);
 
     }
 

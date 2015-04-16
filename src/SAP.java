@@ -1,7 +1,6 @@
 public class SAP {
 
     private final Digraph DG;
-    private boolean[] visited;
 
     private static class Pair<KeyType, ValueType> {
         private final KeyType KEY;
@@ -24,8 +23,7 @@ public class SAP {
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
         if (G == null) throw new java.lang.NullPointerException();
-        DG = G;
-        visited = new boolean[G.V()];
+        DG = new Digraph(G);
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path
@@ -60,7 +58,8 @@ public class SAP {
             throw new java.lang.IndexOutOfBoundsException();
 
         Queue<Pair<Integer, Integer>> q = new Queue<>();
-        java.util.Arrays.fill(visited, false);
+
+        boolean[] visited = new boolean[DG.V()];
 
         int sapLenght = Integer.MAX_VALUE;
         int ancestorVertex = -1;
@@ -79,8 +78,10 @@ public class SAP {
             int x = p.getKey();
             int level = p.getValue() + 1;
 
+//            visited[x] = true;
+            
             for (int currentVertex: DG.adj(x)) {
-                if (visited[currentVertex]) break;
+                if (visited[currentVertex]) continue;
                 if (bfs.hasPathTo(currentVertex)) {
                     int tmp = bfs.distTo(currentVertex) + level;
                     if (sapLenght > tmp) {

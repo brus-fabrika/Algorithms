@@ -15,7 +15,7 @@ public class WordNetTest {
 
     @Test
     public void testIsNoun() {
-        WordNet wordnet = new WordNet("synsets15.txt", "hypernyms15Path.txt");
+        WordNet wordnet = new WordNet("synsets15.txt", "hypernyms15Tree.txt");
         assertEquals(true, wordnet.isNoun("a"));
         assertEquals(true, wordnet.isNoun("o"));
         assertEquals(false, wordnet.isNoun("p"));
@@ -24,7 +24,7 @@ public class WordNetTest {
 
     @Test
     public void testNouns() {
-        WordNet wordnet = new WordNet("synsets3.txt", "hypernyms3InvalidCycle.txt");
+        WordNet wordnet = new WordNet("synsets6.txt", "hypernyms6InvalidTwoRoots.txt");
         Iterable<String> nouns = wordnet.nouns();
         Iterator<String> i = nouns.iterator();
 
