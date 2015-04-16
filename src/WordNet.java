@@ -3,29 +3,11 @@ import java.util.Map;
 
 public class WordNet {
 
-    private static class SynsetData {
-        private final String WORDS;
-        private final String DESCRIPTION;
-
-        SynsetData(String w, String d) {
-            WORDS = w;
-            DESCRIPTION = d;
-        }
-
-        public String getWords() {
-            return WORDS;
-        }
-
-        public String getDescription() {
-            return DESCRIPTION;
-        }
-    }
-
-    private Map<Integer, SynsetData> mSynsets = new HashMap<>();
+    private Map<Integer, String> mSynsets = new HashMap<>();
 
     private Map<String, Bag<Integer>> mNouns = new HashMap<>();
 
-    private Digraph mGraph;
+    private SAP mSap;
 
     // constructor takes the name of the two input files
     public WordNet(String synsets, String hypernyms) {
@@ -38,7 +20,7 @@ public class WordNet {
         while (line != null) {
             String[] ss = line.split(",");
             int id = Integer.parseInt(ss[0]);
-            mSynsets.put(id, new SynsetData(ss[1], ss[2]));
+            mSynsets.put(id, ss[1]);
 
             for (String s: ss[1].split(" ")) {
                 if (mNouns.containsKey(s)) mNouns.get(s).add(id);
@@ -51,7 +33,7 @@ public class WordNet {
             line = synIn.readLine();
         }
 
-        mGraph = new Digraph(mSynsets.size());
+        Digraph mGraph = new Digraph(mSynsets.size());
 
         In hypIn = new In(hypernyms);
 
@@ -67,6 +49,8 @@ public class WordNet {
 
             line = hypIn.readLine();
         }
+
+        mSap = new SAP(mGraph);
 
     }
 
@@ -94,8 +78,7 @@ public class WordNet {
         if (as != null) {
             Iterable<Integer> bs = mNouns.get(nounB);
             if (bs != null) {
-                SAP sap = new SAP(mGraph);
-                return sap.length(as, bs);
+                return mSap.length(as, bs);
             }
         }
         return -1;
@@ -105,8 +88,11 @@ public class WordNet {
     // nounA and nounB
     // in a shortest ancestral path (defined below)
     public String sap(String nounA, String nounB) {
-        if (nounA == null || nounB == null) throw new java.lang.NullPointerException();
-        if (!isNoun(nounA) || !isNoun(nounB)) throw new java.lang.IllegalArgumentException();
+        if (nounA == null || nounB == null)
+            throw new java.lang.NullPointerException();
+
+        if (!isNoun(nounA) || !isNoun(nounB))
+            throw new java.lang.IllegalArgumentException();
 
         int ancestorId = -1;
 
@@ -114,13 +100,12 @@ public class WordNet {
         if (as != null) {
             Iterable<Integer> bs = mNouns.get(nounB);
             if (bs != null) {
-                SAP sap = new SAP(mGraph);
-                ancestorId = sap.ancestor(as, bs);
+                ancestorId = mSap.ancestor(as, bs);
             }
         }
 
         if (ancestorId != -1) {
-            return mSynsets.get(ancestorId).getWords();
+            return mSynsets.get(ancestorId);
         }
 
         return null;

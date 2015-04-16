@@ -1,6 +1,7 @@
 public class SAP {
 
     private final Digraph DG;
+    private boolean[] visited;
 
     private static class Pair<KeyType, ValueType> {
         private final KeyType KEY;
@@ -24,10 +25,14 @@ public class SAP {
     public SAP(Digraph G) {
         if (G == null) throw new java.lang.NullPointerException();
         DG = G;
+        visited = new boolean[G.V()];
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
+
+        if (v < 0 || v > DG.V() - 1 || w < 0 || w > DG.V() - 1)
+            throw new java.lang.IndexOutOfBoundsException();
 
         BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(DG, w);
         Pair<Integer, Integer> p = calculateAncestor(v, bsf);
@@ -39,6 +44,9 @@ public class SAP {
     // path; -1 if no such path
     public int ancestor(int v, int w) {
 
+        if (v < 0 || v > DG.V() - 1 || w < 0 || w > DG.V() - 1)
+            throw new java.lang.IndexOutOfBoundsException();
+
         BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(DG, w);
         Pair<Integer, Integer> p = calculateAncestor(v, bsf);
 
@@ -47,7 +55,11 @@ public class SAP {
 
     private Pair<Integer, Integer> calculateAncestor(int v, BreadthFirstDirectedPaths bfs) {
 
+        if (v < 0 || v > DG.V() - 1)
+            throw new java.lang.IndexOutOfBoundsException();
+
         Queue<Pair<Integer, Integer>> q = new Queue<>();
+        java.util.Arrays.fill(visited, false);
 
         int sapLenght = Integer.MAX_VALUE;
         int ancestorVertex = -1;
@@ -67,8 +79,7 @@ public class SAP {
             int level = p.getValue() + 1;
 
             for (int currentVertex: DG.adj(x)) {
-              StdOut.println("currentVertex = " + currentVertex);
-                q.enqueue(new Pair<Integer, Integer>(currentVertex, level));
+                if (visited[currentVertex]) break;
                 if (bfs.hasPathTo(currentVertex)) {
                     int tmp = bfs.distTo(currentVertex) + level;
                     if (sapLenght > tmp) {
@@ -76,6 +87,8 @@ public class SAP {
                         ancestorVertex = currentVertex;
                     }
                 }
+                q.enqueue(new Pair<Integer, Integer>(currentVertex, level));
+                visited[currentVertex] = true;
             }
         }
 
@@ -87,6 +100,8 @@ public class SAP {
     // in w; -1 if no such path
     public int length(Iterable<Integer> v, Iterable<Integer> w) {
 
+        if (v == null || w == null) throw new java.lang.NullPointerException();
+
         BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(DG, w);
 
         Pair<Integer, Integer> p = calculateAncestor(v, bsf);
@@ -97,6 +112,8 @@ public class SAP {
     // a common ancestor that participates in shortest ancestral path; -1 if no
     // such path
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
+
+        if (v == null || w == null) throw new java.lang.NullPointerException();
 
         BreadthFirstDirectedPaths bsf = new BreadthFirstDirectedPaths(DG, w);
 
