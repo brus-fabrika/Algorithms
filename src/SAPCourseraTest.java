@@ -59,6 +59,16 @@ public class SAPCourseraTest {
     }
 
     @Test
+    public void testdigraph_wordnet_coursera_length_2() {
+        Digraph G = load("digraph-wordnet.txt");
+        SAP sap = new SAP(G);
+        final int v = 32348;
+        final int w = 344;
+        assertEquals(15, sap.length(v, w));
+        assertEquals(15, sap.length(w, v));
+    }
+
+    @Test
     public void testdigraph_wordnet_coursera_length_multi_1() {
         SAP sap = new SAP(load("digraph-wordnet.txt"));
         Bag<Integer> vs = new Bag<Integer>();

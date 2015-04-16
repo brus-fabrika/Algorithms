@@ -53,7 +53,8 @@ public class SAP {
         return p.getKey();
     }
 
-    private Pair<Integer, Integer> calculateAncestor(int v, BreadthFirstDirectedPaths bfs) {
+    private Pair<Integer, Integer>
+    calculateAncestor(int v, BreadthFirstDirectedPaths bfs) {
 
         if (v < 0 || v > DG.V() - 1)
             throw new java.lang.IndexOutOfBoundsException();
