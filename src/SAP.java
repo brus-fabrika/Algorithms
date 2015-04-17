@@ -1,6 +1,7 @@
 public class SAP {
 
     private final Digraph DG;
+    private boolean[] visited;
 
     private static class Pair<KeyType, ValueType> {
         private final KeyType KEY;
@@ -24,6 +25,7 @@ public class SAP {
     public SAP(Digraph G) {
         if (G == null) throw new java.lang.NullPointerException();
         DG = new Digraph(G);
+        visited = new boolean[G.V()];
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path
@@ -54,12 +56,12 @@ public class SAP {
     private Pair<Integer, Integer>
     calculateAncestor(int v, BreadthFirstDirectedPaths bfs) {
 
-        if (v < 0 || v > DG.V() - 1)
-            throw new java.lang.IndexOutOfBoundsException();
+//        if (v < 0 || v > DG.V() - 1)
+//            throw new java.lang.IndexOutOfBoundsException();
 
         Queue<Pair<Integer, Integer>> q = new Queue<>();
 
-        boolean[] visited = new boolean[DG.V()];
+        java.util.Arrays.fill(visited, false);
 
         int sapLenght = Integer.MAX_VALUE;
         int ancestorVertex = -1;
@@ -78,8 +80,6 @@ public class SAP {
             int x = p.getKey();
             int level = p.getValue() + 1;
 
-//            visited[x] = true;
-            
             for (int currentVertex: DG.adj(x)) {
                 if (visited[currentVertex]) continue;
                 if (bfs.hasPathTo(currentVertex)) {
@@ -94,8 +94,10 @@ public class SAP {
             }
         }
 
-        return ancestorVertex == -1 ? new Pair<Integer, Integer>(-1, -1)
-                                    : new Pair<Integer, Integer>(ancestorVertex, sapLenght);
+        if (ancestorVertex != -1)
+            return new Pair<Integer, Integer>(ancestorVertex, sapLenght);
+
+        return new Pair<Integer, Integer>(-1, -1);
     }
 
     // length of shortest ancestral path between any vertex in v and any vertex
@@ -133,7 +135,9 @@ public class SAP {
             if ((t.getValue() != -1) && (p.getValue() > t.getValue())) p = t;
         }
 
-        return p.getKey() == -1 ? new Pair<Integer, Integer>(-1, -1) : p;
+        if (p.getKey() != -1) return p;
+
+        return new Pair<Integer, Integer>(-1, -1);
     }
 
     // do unit testing of this class

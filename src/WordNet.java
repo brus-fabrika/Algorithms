@@ -49,16 +49,18 @@ public class WordNet {
 
             line = hypIn.readLine();
         }
-        
+
         DirectedCycle dc = new DirectedCycle(graph);
-        if (dc.hasCycle()) throw new java.lang.IllegalArgumentException("Cycle: not a rooted DAG");
-        
+        if (dc.hasCycle())
+            throw new java.lang.IllegalArgumentException("Cycle: not a rooted DAG");
+
         int rootCount = 0;
-        for (int i = 0; i < graph.V() - 1; ++i) {
+        for (int i = 0; i < graph.V(); ++i) {
           if (graph.outdegree(i) == 0) rootCount++;
         }
-        
-        if (rootCount != 1) throw new java.lang.IllegalArgumentException("More then 1 root: not a rooted DAG");
+
+        if (rootCount != 1)
+            throw new java.lang.IllegalArgumentException("More then 1 root: not a rooted DAG");
 
         mSap = new SAP(graph);
 

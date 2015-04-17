@@ -22,9 +22,9 @@ public class WordNetTest {
         assertEquals(false, wordnet.isNoun("x"));
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testNouns() {
-        WordNet wordnet = new WordNet("synsets6.txt", "hypernyms6InvalidTwoRoots.txt");
+        WordNet wordnet = new WordNet("synsets3.txt", "hypernyms3InvalidTwoRoots.txt");
         Iterable<String> nouns = wordnet.nouns();
         Iterator<String> i = nouns.iterator();
 
@@ -57,13 +57,13 @@ public class WordNetTest {
         WordNet wordnet = new WordNet("synsets.txt", "hypernyms.txt");
         assertEquals(29, wordnet.distance("Brown_Swiss", "barrel_roll"));
     }
-    
+
     @Test
     public void testSapWormBird() {
         WordNet wordnet = new WordNet("synsets.txt", "hypernyms.txt");
         assertEquals("animal animate_being beast brute creature fauna", wordnet.sap("worm", "bird"));
     }
-  
+
     @Test
     public void testSapBirdWorm() {
         WordNet wordnet = new WordNet("synsets.txt", "hypernyms.txt");
